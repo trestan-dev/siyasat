@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiyasatPH | Bulletin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Bulletin-specific */
+        #bulletin-table thead th { white-space: nowrap; }
+        #bulletin-table td { vertical-align: middle; font-size: 14px; }
+        @media (max-width:575px) {
+            #bulletin-table td, #bulletin-table th { font-size: 12px; padding: 8px 6px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Layout injected by layout.js -->
+
+<main>
+    <section class="container my-4 my-md-5">
+
+        <!-- Section header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-2 mb-3 gap-2">
+            <h3 class="fw-bold m-0">BULLETIN</h3>
+
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- Filter / Sort dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-danger rounded-0"
+                            data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside"
+                            aria-expanded="false"
+                            title="Filter &amp; Sort">
+                        <i class="bi bi-funnel-fill"></i>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow p-0" style="min-width:220px;">
+
+                        <!-- FILTER section -->
+                        <li><div class="px-3 pt-2 pb-1" style="font-size:10px;font-weight:800;text-transform:uppercase;color:#999;letter-spacing:.05em;">Filter by Type</div></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="all"     href="#">All Types</a></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="task"    href="#">Task Scam</a></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="trading" href="#">Trading / Unauthorized Broker</a></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="invest"  href="#">Investment Fraud</a></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="ponzi"   href="#">Ponzi Scheme</a></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="lending" href="#">Illegal Lending</a></li>
+                        <li><a class="dropdown-item bulletin-filter" data-type="fake"    href="#">Fake / Impersonation</a></li>
+
+                        <li><hr class="dropdown-divider m-0"></li>
+
+                        <!-- SORT by Date -->
+                        <li><div class="px-3 pt-2 pb-1" style="font-size:10px;font-weight:800;text-transform:uppercase;color:#999;letter-spacing:.05em;">Sort by Date</div></li>
+                        <li><a class="dropdown-item bulletin-sort" data-sort="date-desc" href="#">Newest to Oldest</a></li>
+                        <li><a class="dropdown-item bulletin-sort" data-sort="date-asc"  href="#">Oldest to Newest</a></li>
+
+                        <li><hr class="dropdown-divider m-0"></li>
+
+                        <!-- SORT by Name -->
+                        <li><div class="px-3 pt-2 pb-1" style="font-size:10px;font-weight:800;text-transform:uppercase;color:#999;letter-spacing:.05em;">Sort by Name</div></li>
+                        <li><a class="dropdown-item bulletin-sort" data-sort="name-asc"  href="#">A – Z</a></li>
+                        <li><a class="dropdown-item bulletin-sort" data-sort="name-desc" href="#">Z – A</a></li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Pagination info top -->
+        <div id="bulletin-page-info" class="pagination-info mb-3"></div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover shadow-sm mb-0">
+                <thead class="table-danger">
+                    <tr>
+                        <th style="width:130px;">EFFECTIVE DATE</th>
+                        <th>ENTITY NAME</th>
+                        <th style="width:200px;">REGULATORY ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="bulletin-table"></tbody>
+            </table>
+        </div>
+
+        <!-- Pagination controls bottom -->
+        <div id="bulletin-pagination" class="d-flex flex-wrap justify-content-between align-items-center mt-3 gap-2"></div>
+
+    </section>
+</main>
+
+<!-- Scam Guide Modal -->
+<div class="modal fade" id="scamGuideModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg rounded-3">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold" id="guide-title">How to Spot This Scam</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p id="guide-description" class="text-muted mb-3">--</p>
+                <h6 class="fw-bold text-danger text-uppercase">Warning Signs</h6>
+                <ul id="guide-signs" class="small"></ul>
+                <h6 class="fw-bold text-danger text-uppercase mt-3">What You Should Do</h6>
+                <p id="guide-action" class="small text-muted">--</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data.js"></script>
+<script src="layout.js"></script>
+<script>
+/* ============================================================
+   Bulletin Page Logic
+   ============================================================ */
+const BULLETIN_PER_PAGE = 30;
+let bulletinState = {
+    items:        [...db],
+    page:         1,
+    activeFilter: 'all',
+    activeSort:   null,
+};
+
+/* ---- Render ---- */
+function renderBulletin(items, page) {
+    bulletinState.items = items;
+    bulletinState.page  = page || 1;
+
+    const total  = items.length;
+    const pages  = Math.ceil(total / BULLETIN_PER_PAGE) || 1;
+    const p      = Math.min(bulletinState.page, pages);
+    const start  = (p - 1) * BULLETIN_PER_PAGE;
+    const slice  = items.slice(start, start + BULLETIN_PER_PAGE);
+
+    /* Info */
+    const from = total === 0 ? 0 : start + 1;
+    const to   = Math.min(start + BULLETIN_PER_PAGE, total);
+    $('#bulletin-page-info').html(
+        `<span>Showing <strong>${from}–${to}</strong> of <strong>${total}</strong> bulletin entries</span>`
+    );
+
+    /* Table rows */
+    const tbody = $('#bulletin-table');
+    tbody.empty();
+    if (slice.length === 0) {
+        tbody.append(`<tr><td colspan="3" class="text-center text-muted py-4">No entries found.</td></tr>`);
+    } else {
+        slice.forEach(i => {
+            const safeType = i.type.replace(/'/g,"\\'");
+            tbody.append(`
+            <tr>
+                <td class="text-muted">${i.date}</td>
+                <td>
+                    <span class="bulletin-name-link" onclick="openScamGuide('${safeType}')">
+                        ${i.name}
+                    </span>
+                </td>
+                <td><span class="badge bg-danger rounded-0 text-uppercase fw-bold" style="font-size:11px;white-space:normal;">${i.type}</span></td>
+            </tr>`);
+        });
+    }
+
+    renderBulletinPagination(p, pages, total);
+}
+
+function renderBulletinPagination(current, pages, total) {
+    const container = $('#bulletin-pagination');
+    container.empty();
+    if (pages <= 1) return;
+
+    container.append(`
+        <span class="pagination-info">
+            Page <strong>${current}</strong> of <strong>${pages}</strong>
+            &nbsp;·&nbsp; <strong>${total}</strong> total entries
+        </span>`);
+
+    const nav = $('<nav aria-label="Bulletin pagination"></nav>');
+    const ul  = $('<ul class="pagination pagination-sm mb-0 flex-wrap"></ul>');
+
+    ul.append(`<li class="page-item ${current===1?'disabled':''}">
+        <a class="page-link" href="#" data-p="${current-1}"><i class="bi bi-chevron-left"></i></a></li>`);
+
+    let lo = Math.max(1, current - 2);
+    let hi = Math.min(pages, lo + 4);
+    lo = Math.max(1, hi - 4);
+    if (lo > 1) ul.append(`<li class="page-item disabled"><span class="page-link">…</span></li>`);
+    for (let i = lo; i <= hi; i++) {
+        ul.append(`<li class="page-item ${i===current?'active':''}">
+            <a class="page-link" href="#" data-p="${i}">${i}</a></li>`);
+    }
+    if (hi < pages) ul.append(`<li class="page-item disabled"><span class="page-link">…</span></li>`);
+
+    ul.append(`<li class="page-item ${current===pages?'disabled':''}">
+        <a class="page-link" href="#" data-p="${current+1}"><i class="bi bi-chevron-right"></i></a></li>`);
+
+    nav.append(ul);
+    container.append(nav);
+
+    ul.on('click', 'a.page-link[data-p]', function(e) {
+        e.preventDefault();
+        const p = parseInt($(this).data('p'));
+        if (isNaN(p) || p < 1 || p > pages) return;
+        renderBulletin(bulletinState.items, p);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+/* ---- Filter ---- */
+$(document).on('click', '.bulletin-filter', function(e) {
+    e.preventDefault();
+    bulletinState.activeFilter = $(this).data('type');
+    $('.bulletin-filter').removeClass('active fw-bold');
+    $(this).addClass('active fw-bold');
+    let items = [...db];
+    if (bulletinState.activeFilter !== 'all' && filterMap[bulletinState.activeFilter]) {
+        items = items.filter(i => filterMap[bulletinState.activeFilter].includes(i.type));
+    }
+    if (bulletinState.activeSort) items = applySort(items, bulletinState.activeSort);
+    renderBulletin(items, 1);
+});
+
+/* ---- Sort ---- */
+$(document).on('click', '.bulletin-sort', function(e) {
+    e.preventDefault();
+    bulletinState.activeSort = $(this).data('sort');
+    $('.bulletin-sort').removeClass('active fw-bold');
+    $(this).addClass('active fw-bold');
+    let base = [...db];
+    if (bulletinState.activeFilter !== 'all' && filterMap[bulletinState.activeFilter]) {
+        base = base.filter(i => filterMap[bulletinState.activeFilter].includes(i.type));
+    }
+    base = applySort(base, bulletinState.activeSort);
+    renderBulletin(base, 1);
+});
+
+function applySort(arr, sort) {
+    const a = [...arr];
+    switch(sort) {
+        case 'date-desc': return a.sort((x,y) => new Date(y.date) - new Date(x.date));
+        case 'date-asc':  return a.sort((x,y) => new Date(x.date) - new Date(y.date));
+        case 'name-asc':  return a.sort((x,y) => x.name.localeCompare(y.name));
+        case 'name-desc': return a.sort((x,y) => y.name.localeCompare(x.name));
+        default: return a;
+    }
+}
+
+/* ---- Scam Guide Modal ---- */
+function openScamGuide(type) {
+    const guide = scamGuides[type];
+    if (!guide) { alert('No guide available for this scam type yet.'); return; }
+    $('#guide-title').text(guide.title);
+    $('#guide-description').text(guide.desc);
+    $('#guide-action').text(guide.action);
+    const ul = $('#guide-signs').empty();
+    guide.signs.forEach(s => ul.append(`<li>${s}</li>`));
+    new bootstrap.Modal(document.getElementById('scamGuideModal')).show();
+}
+
+/* ---- Init ---- */
+$(document).ready(function() {
+    injectLayout();
+    renderBulletin(db, 1);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiyasatPH | About</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Layout injected by layout.js -->
+
+<main>
+    <section class="container my-4 my-md-5">
+
+        <a href="index.html" class="back-link">
+            <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+
+        <div class="about-header">
+            <h1 class="fw-black display-5">About SiyasatPH</h1>
+            <p class="lead text-muted">Transparency and Safety in the Philippine Digital Landscape.</p>
+        </div>
+
+        <div class="row g-5">
+            <div class="col-lg-7">
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-danger">
+                        <i class="bi bi-bullseye me-2"></i>OUR MISSION
+                    </h4>
+                    <p>SiyasatPH is a dedicated public safety initiative designed to provide Filipinos with an offline-first, real-time repository of verified enforcement actions. We aim to bridge the gap between regulatory transparency and public awareness by making "Cease and Desist" orders and advisory bulletins accessible to everyone, anywhere — even without internet access.</p>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-danger">
+                        <i class="bi bi-database-fill me-2"></i>HOW WE COLLECT INFO
+                    </h4>
+                    <p>Our data is synchronized with the latest official releases from the <strong>Securities and Exchange Commission (SEC)</strong>, the <strong>Cybercrime Investigation and Coordinating Center (CICC)</strong>, and the <strong>National Privacy Commission (NPC)</strong>. We focus on identifying patterns of Ponzi schemes, illegal lending apps, and task-based scams affecting our local community.</p>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-danger">
+                        <i class="bi bi-people-fill me-2"></i>A COLLECTIVE DEFENSE
+                    </h4>
+                    <p>By using the Risk Audit tool, users contribute to a growing database of digital threats. While we are an AI-assisted portal, our priority remains grounded in human safety and the protection of Filipino hard-earned assets.</p>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-danger">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>DISCLAIMER
+                    </h4>
+                    <p class="text-muted small">SiyasatPH is an independent public safety project and is <strong>not affiliated with any government agency</strong>. All enforcement data referenced herein is sourced from publicly available official government advisories. This portal is for informational and advisory purposes only. Always verify information through official government channels before taking any legal or financial action.</p>
+                </section>
+
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card border-0 bg-light p-4 shadow-sm mb-4">
+                    <h5 class="fw-bold text-dark mb-3">Quick Navigation</h5>
+                    <div class="d-grid gap-2">
+                        <a href="index.html"     class="btn btn-outline-danger rounded-0 text-start"><i class="bi bi-house-fill me-2"></i> Home — Advisory Feed</a>
+                        <a href="bulletins.html" class="btn btn-outline-danger rounded-0 text-start"><i class="bi bi-clipboard-fill me-2"></i> Bulletin — CDO Table</a>
+                        <a href="audit.html"     class="btn btn-outline-danger rounded-0 text-start"><i class="bi bi-calculator-fill me-2"></i> Risk Audit Tool</a>
+                        <a href="hotlines.html"  class="btn btn-outline-danger rounded-0 text-start"><i class="bi bi-telephone-fill me-2"></i> Reporting Directory</a>
+                    </div>
+                </div>
+
+                <div class="card border-0 border-start border-danger border-4 bg-light p-4 shadow-sm">
+                    <h5 class="fw-bold text-danger mb-2">Contact &amp; Report</h5>
+                    <p class="small text-muted mb-2">Found a scam not in our database? Help protect others by reporting it.</p>
+                    <a href="audit.html" class="btn btn-danger fw-bold rounded-0 w-100">
+                        <i class="bi bi-shield-plus me-2"></i> Use the Risk Audit Tool
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data.js"></script>
+<script src="layout.js"></script>
+<script>
+$(document).ready(() => injectLayout());
+</script>
+</body>
+</html>

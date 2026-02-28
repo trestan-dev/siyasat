@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiyasatPH | Hotlines</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Layout injected by layout.js -->
+
+<main>
+    <section class="container my-4 my-md-5">
+        <h3 class="fw-bold border-bottom pb-2 text-uppercase">Reporting Directory</h3>
+        <p class="text-muted mt-2 mb-4">Official government hotlines for reporting scams, cybercrime, and investment fraud in the Philippines.</p>
+
+        <div class="row g-3 g-md-4">
+
+            <div class="col-md-6">
+                <div class="card p-4 border-0 border-start border-danger border-4 bg-light shadow-sm h-100">
+                    <h5 class="fw-bold text-danger"><i class="bi bi-telephone-fill me-2"></i>IARC HOTLINE</h5>
+                    <h2 class="fw-bold">1326</h2>
+                    <p class="text-muted small mb-3">CICC official line for cybercrime and investment fraud reporting. Available 24/7.</p>
+                    <a href="tel:1326" class="btn btn-danger fw-bold rounded-0 align-self-start px-4">
+                        <i class="bi bi-telephone me-1"></i> CALL NOW
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 border-0 border-start border-primary border-4 bg-light shadow-sm h-100">
+                    <h5 class="fw-bold text-primary"><i class="bi bi-shield-fill me-2"></i>PNP ACG</h5>
+                    <h2 class="fw-bold">(02) 8414-1560</h2>
+                    <p class="text-muted small mb-3">Philippine National Police Anti-Cybercrime Group investigation desk.</p>
+                    <a href="tel:+63284141560" class="btn btn-primary fw-bold rounded-0 align-self-start px-4">
+                        <i class="bi bi-telephone me-1"></i> CONTACT
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 border-0 border-start border-warning border-4 bg-light shadow-sm h-100">
+                    <h5 class="fw-bold" style="color:#b8860b;"><i class="bi bi-bank me-2"></i>SEC Enforcement</h5>
+                    <h2 class="fw-bold" style="font-size:1.5rem;">epd@sec.gov.ph</h2>
+                    <p class="text-muted small mb-3">Securities &amp; Exchange Commission — for illegal investment solicitation and Ponzi schemes.</p>
+                    <a href="mailto:epd@sec.gov.ph" class="btn fw-bold rounded-0 align-self-start px-4"
+                       style="background:#b8860b;color:#fff;">
+                        <i class="bi bi-envelope me-1"></i> EMAIL SEC
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 border-0 border-start border-success border-4 bg-light shadow-sm h-100">
+                    <h5 class="fw-bold text-success"><i class="bi bi-person-lock me-2"></i>National Privacy Commission</h5>
+                    <h2 class="fw-bold" style="font-size:1.5rem;">inquiries@privacy.gov.ph</h2>
+                    <p class="text-muted small mb-3">For illegal lending apps that access and misuse your personal data and contacts.</p>
+                    <a href="mailto:inquiries@privacy.gov.ph" class="btn btn-success fw-bold rounded-0 align-self-start px-4">
+                        <i class="bi bi-envelope me-1"></i> EMAIL NPC
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card p-4 border-0 bg-light shadow-sm">
+                    <h5 class="fw-bold text-dark mb-3">
+                        <i class="bi bi-info-circle-fill text-danger me-2"></i>
+                        How to File an Effective Report
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="d-flex align-items-start gap-2">
+                                <span class="badge bg-danger rounded-circle" style="min-width:24px;height:24px;line-height:1;">1</span>
+                                <p class="small text-muted mb-0">Screenshot all conversations, receipts, and profile pages.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="d-flex align-items-start gap-2">
+                                <span class="badge bg-danger rounded-circle" style="min-width:24px;height:24px;line-height:1;">2</span>
+                                <p class="small text-muted mb-0">Record all GCash or bank account numbers involved.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="d-flex align-items-start gap-2">
+                                <span class="badge bg-danger rounded-circle" style="min-width:24px;height:24px;line-height:1;">3</span>
+                                <p class="small text-muted mb-0">Use the Risk Audit tool to auto-generate your report template.</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="d-flex align-items-start gap-2">
+                                <span class="badge bg-danger rounded-circle" style="min-width:24px;height:24px;line-height:1;">4</span>
+                                <p class="small text-muted mb-0">Send your evidence to the appropriate agency above.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data.js"></script>
+<script src="layout.js"></script>
+<script>
+$(document).ready(() => injectLayout());
+</script>
+</body>
+</html>

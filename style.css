@@ -1,0 +1,183 @@
+/* ============================================================
+   SiyasatPH — Global Stylesheet
+   ============================================================ */
+:root {
+    --red:      #a30000;
+    --ph-blue:  #0038a8;
+    --gov-gray: #f2f2f2;
+    --slate:    #212529;
+}
+
+/* ---- Reset / Base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #fff; color: #333; margin: 0; padding: 0; }
+a { color: inherit; }
+img { max-width: 100%; }
+
+/* ---- GOV.PH Bar ---- */
+.gov-bar { background: var(--gov-gray); font-size: 11px; padding: 8px 0; border-bottom: 1px solid #ddd; }
+.gov-bar a { text-decoration: none; color: #333; font-weight: bold; margin-right: 15px; }
+
+/* ---- Header ---- */
+.agency-header {
+    padding: 12px 0;
+    border-bottom: 5px solid var(--red);
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,.05);
+}
+.logo-img { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+.agency-logo { font-weight: 900; font-size: 30px; color: var(--red); letter-spacing: -1px; line-height: 1; }
+.agency-sub  { font-size: 11px; text-transform: uppercase; color: #666; font-weight: bold; display: block; white-space: nowrap; }
+
+/* ---- Desktop Nav ---- */
+.desktop-nav { display: none; gap: 15px; margin-right: 15px; align-items: center; }
+.desktop-nav a {
+    text-decoration: none; color: var(--slate);
+    font-weight: 700; font-size: 12px;
+    text-transform: uppercase; transition: color .2s; white-space: nowrap;
+}
+.desktop-nav a:hover,
+.desktop-nav a.active { color: var(--red); }
+
+@media (min-width: 768px) {
+    .desktop-nav { display: flex; }
+    .burger-menu-btn { display: none !important; }
+}
+
+/* ---- Nav Tools ---- */
+.nav-tools { display: flex; gap: 4px; align-items: center; }
+.tool-btn {
+    background: none; border: none; font-size: 22px;
+    color: var(--slate); cursor: pointer; transition: .2s;
+    padding: 8px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+}
+.tool-btn:hover { background: var(--gov-gray); color: var(--red); }
+
+/* ---- Search Bar ---- */
+#searchWrapper {
+    display: none; background: #fff; padding: 12px 0;
+    border-bottom: 2px solid var(--red);
+    position: absolute; width: 100%; left: 0; z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,.1);
+}
+
+/* ---- Offcanvas / Sidebar ---- */
+.offcanvas { border-left: 5px solid var(--red); }
+.menu-link {
+    font-weight: 700; color: var(--slate); text-decoration: none;
+    display: block; padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    text-transform: uppercase; font-size: 14px;
+    transition: .15s;
+}
+.menu-link:hover,
+.menu-link.active { background: var(--gov-gray); color: var(--red); }
+
+/* ---- Hero ---- */
+.hero-banner {
+    background:
+        linear-gradient(rgba(163,0,0,.9), rgba(163,0,0,.9)),
+        url('https://www.transparenttextures.com/patterns/cubes.png');
+    color: #fff;
+    padding: 60px 0;
+}
+
+/* ---- Cards ---- */
+.card-scam {
+    border: 1px solid #eee;
+    border-bottom: 4px solid #ddd;
+    transition: .3s; height: 100%;
+    border-radius: 0; background: #fff; cursor: pointer;
+}
+.card-scam:hover {
+    border-bottom-color: var(--red);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,.1);
+}
+.card-title { font-weight: 800; color: var(--red); font-size: 1.05rem; text-transform: uppercase; }
+
+/* ---- Pagination ---- */
+.pagination-info { font-size: 13px; color: #666; }
+.page-item.active .page-link { background-color: var(--red); border-color: var(--red); }
+.page-link { color: var(--red); }
+.page-link:hover { color: var(--red); }
+
+/* ---- Bulletin table ---- */
+#bulletin-table td { vertical-align: middle; }
+.bulletin-name-link { cursor: pointer; color: var(--ph-blue); font-weight: 700; }
+.bulletin-name-link:hover { text-decoration: underline; }
+
+/* ---- Submenu / Dropdown ---- */
+.dropdown-submenu { position: relative; }
+.dropdown-submenu > .submenu {
+    display: none;
+    position: absolute;
+    top: 0; left: 100%;
+    min-width: 180px;
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.15);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.175);
+}
+/* On smaller screens fall below */
+@media (max-width: 576px) {
+    .dropdown-submenu > .submenu {
+        top: 100%; left: 0;
+    }
+}
+.dropdown-submenu.open > .submenu { display: block; }
+.submenu-toggle .arrow { font-size: 10px; margin-left: 6px; color: #888; }
+
+/* ---- Page transitions ---- */
+.page-view { display: none; }
+.active-view { display: block; animation: fadeIn .35s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- Modals ---- */
+.report-modal-header { background: var(--red); color: #fff; }
+.prediction-box {
+    background: #f8f9fa;
+    border-left: 5px solid var(--red);
+    padding: 15px; margin-bottom: 20px;
+}
+.modal-body { max-height: 72vh; overflow-y: auto; }
+.modal-info-section { margin-top: 18px; padding: 15px; background: #fff; border: 1px solid #eee; }
+.modal-info-section h6 { font-weight: 800; color: var(--red); text-transform: uppercase; margin-bottom: 8px; }
+
+/* ---- Risk Audit ---- */
+.list-group-item { border: 0; border-bottom: 1px solid #f0f0f0; }
+.is-invalid { border-color: #dc3545 !important; }
+.invalid-msg { color: #dc3545; font-size: 11px; display: none; margin-top: 4px; font-weight: bold; }
+
+/* ---- About ---- */
+.about-header { border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 30px; }
+.back-link {
+    cursor: pointer; color: var(--slate); font-weight: bold;
+    text-decoration: none; display: inline-flex; align-items: center;
+    gap: 5px; margin-bottom: 20px;
+}
+.back-link:hover { color: var(--red); }
+
+/* ---- Footer ---- */
+footer { background: #1a1a1a; color: #ccc; padding: 50px 0 30px; font-size: 13px; margin-top: 60px; }
+footer a { color: #aaa; text-decoration: none; transition: color .2s; }
+footer a:hover { color: #fff; text-decoration: underline; }
+.footer-nav a { display: block; margin-bottom: 8px; font-size: 13px; }
+.footer-nav a:hover { color: #fff; }
+.footer-divider { border-color: #333; }
+
+/* ---- Responsive helpers ---- */
+@media (max-width: 575px) {
+    .agency-logo { font-size: 24px; }
+    .agency-sub  { font-size: 9px; }
+    .logo-img    { width: 36px; height: 36px; }
+    .hero-banner { padding: 40px 0; }
+    .hero-banner .display-6 { font-size: 1.5rem; }
+    .hero-banner .lead { font-size: .9rem; }
+    #netStatus span { display: none; }          /* hide ONLINE text, keep dot */
+    .badge.bg-danger { font-size: 9px; padding: 4px 6px; }
+}

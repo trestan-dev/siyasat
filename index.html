@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiyasatPH | Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Layout injected by layout.js -->
+
+<main>
+
+    <!-- Hero -->
+    <section class="hero-banner">
+        <div class="container text-center">
+            <h2 class="fw-bold display-6">SiyasatPH</h2>
+            <p class="lead mb-0">Always Accessible. Always Protected.<br class="d-sm-none">
+            Your offline-first defense against digital fraud.</p>
+        </div>
+    </section>
+
+    <!-- Advisories -->
+    <section class="container my-4 my-md-5">
+
+        <!-- Section header -->
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2" style="gap:8px;">
+            <h5 class="fw-bold m-0" style="font-size:clamp(12px,3.8vw,20px);letter-spacing:-.3px;white-space:nowrap;">ENFORCEMENT ADVISORIES</h5>
+
+            <div class="d-flex align-items-center flex-shrink-0" style="gap:8px;">
+
+                <!-- Network status -->
+                <div id="netStatus" class="fw-bold text-uppercase" style="font-size:10px;white-space:nowrap;">
+                    <i class="bi bi-circle-fill me-1" style="font-size:8px;"></i>
+                    <span id="netText">ONLINE</span>
+                </div>
+
+                <!-- Filter / Sort dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-danger rounded-0"
+                            data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside"
+                            aria-expanded="false"
+                            title="Filter &amp; Sort">
+                        <i class="bi bi-funnel-fill"></i>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow p-0" style="min-width:220px;">
+
+                        <!-- FILTER section -->
+                        <li><div class="px-3 pt-2 pb-1" style="font-size:10px;font-weight:800;text-transform:uppercase;color:#999;letter-spacing:.05em;">Filter by Type</div></li>
+                        <li><a class="dropdown-item home-filter" data-type="all"     href="#">All Types</a></li>
+                        <li><a class="dropdown-item home-filter" data-type="task"    href="#">Task Scam</a></li>
+                        <li><a class="dropdown-item home-filter" data-type="trading" href="#">Trading / Unauthorized Broker</a></li>
+                        <li><a class="dropdown-item home-filter" data-type="invest"  href="#">Investment Fraud</a></li>
+                        <li><a class="dropdown-item home-filter" data-type="ponzi"   href="#">Ponzi Scheme</a></li>
+                        <li><a class="dropdown-item home-filter" data-type="lending" href="#">Illegal Lending</a></li>
+                        <li><a class="dropdown-item home-filter" data-type="fake"    href="#">Fake / Impersonation</a></li>
+
+                        <li><hr class="dropdown-divider m-0"></li>
+
+                        <!-- SORT section -->
+                        <li><div class="px-3 pt-2 pb-1" style="font-size:10px;font-weight:800;text-transform:uppercase;color:#999;letter-spacing:.05em;">Sort by Date</div></li>
+                        <li><a class="dropdown-item home-sort" data-sort="date-desc" href="#">Latest to Oldest</a></li>
+                        <li><a class="dropdown-item home-sort" data-sort="date-asc"  href="#">Oldest to Latest</a></li>
+
+                        <li><hr class="dropdown-divider m-0"></li>
+
+                        <li><div class="px-3 pt-2 pb-1" style="font-size:10px;font-weight:800;text-transform:uppercase;color:#999;letter-spacing:.05em;">Sort by Name</div></li>
+                        <li><a class="dropdown-item home-sort" data-sort="name-asc"  href="#">A – Z</a></li>
+                        <li><a class="dropdown-item home-sort" data-sort="name-desc" href="#">Z – A</a></li>
+
+                    </ul>
+                </div><!-- /dropdown -->
+
+            </div>
+        </div><!-- /header -->
+
+        <!-- Pagination info top -->
+        <div id="home-page-info" class="pagination-info mb-3"></div>
+
+        <!-- Cards grid -->
+        <div id="scam-grid" class="row g-3 g-md-4"></div>
+
+        <!-- Pagination controls -->
+        <div id="home-pagination" class="d-flex flex-wrap justify-content-between align-items-center mt-4 gap-2"></div>
+
+    </section>
+</main>
+
+<!-- Info Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 rounded-0 shadow-lg">
+            <div class="modal-header bg-danger text-white rounded-0">
+                <h6 class="modal-title fw-bold text-uppercase">Enforcement Detail Record</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <h4 id="m-name" class="fw-bold text-danger mb-1">--</h4>
+                <span id="m-type" class="badge bg-dark rounded-0 mb-3">--</span>
+                <hr>
+                <p class="small fw-bold text-muted mb-1 text-uppercase">Modus Operandi:</p>
+                <p id="m-modus" class="text-secondary mb-0">--</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data.js"></script>
+<script src="layout.js"></script>
+<script>
+/* ============================================================
+   Home Page Logic
+   ============================================================ */
+const HOME_PER_PAGE = 10;
+let homeState = {
+    items: [...db],
+    page:  1,
+    activeFilter: 'all',
+    activeSort:   null,
+};
+
+/* ---- Render ---- */
+function renderHome(items, page) {
+    homeState.items = items;
+    homeState.page  = page || 1;
+
+    const total  = items.length;
+    const pages  = Math.ceil(total / HOME_PER_PAGE) || 1;
+    const p      = Math.min(homeState.page, pages);
+    const start  = (p - 1) * HOME_PER_PAGE;
+    const slice  = items.slice(start, start + HOME_PER_PAGE);
+
+    /* Info line */
+    const from = total === 0 ? 0 : start + 1;
+    const to   = Math.min(start + HOME_PER_PAGE, total);
+    $('#home-page-info').html(
+        `<span>Showing <strong>${from}–${to}</strong> of <strong>${total}</strong> advisories</span>`
+    );
+
+    /* Cards */
+    const g = $('#scam-grid');
+    g.empty();
+    if (slice.length === 0) {
+        g.append(`<div class="col-12 text-center text-muted py-5">No advisories found.</div>`);
+    } else {
+        slice.forEach(i => {
+            const safeName = i.name.replace(/'/g, "\\'");
+            g.append(`
+            <div class="col-sm-6 col-lg-4">
+                <div class="card card-scam p-3 p-md-4 shadow-sm h-100" onclick="showInfo('${safeName}')">
+                    <small class="text-danger fw-bold text-uppercase d-block mb-1">${i.type}</small>
+                    <h5 class="card-title mb-2">${i.name}</h5>
+                    <p class="small text-muted mb-0">
+                        <i class="bi bi-calendar-check me-1"></i> Advisory: ${i.date}
+                    </p>
+                </div>
+            </div>`);
+        });
+    }
+
+    /* Pagination controls */
+    renderHomePagination(p, pages, total);
+}
+
+function renderHomePagination(current, pages, total) {
+    const container = $('#home-pagination');
+    container.empty();
+    if (pages <= 1) return;
+
+    /* Left: total count */
+    container.append(`
+        <span class="pagination-info">
+            Page <strong>${current}</strong> of <strong>${pages}</strong>
+            &nbsp;·&nbsp; <strong>${total}</strong> total advisories
+        </span>`);
+
+    /* Right: page buttons */
+    const nav = $('<nav aria-label="Home pagination"></nav>');
+    const ul  = $('<ul class="pagination pagination-sm mb-0 flex-wrap"></ul>');
+
+    /* Prev */
+    ul.append(`
+        <li class="page-item ${current===1?'disabled':''}">
+            <a class="page-link" href="#" data-p="${current-1}" aria-label="Previous">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </li>`);
+
+    /* Page numbers — show at most 5 around current */
+    let lo = Math.max(1, current - 2);
+    let hi = Math.min(pages, lo + 4);
+    lo = Math.max(1, hi - 4);
+    if (lo > 1) ul.append(`<li class="page-item disabled"><span class="page-link">…</span></li>`);
+    for (let i = lo; i <= hi; i++) {
+        ul.append(`<li class="page-item ${i===current?'active':''}">
+            <a class="page-link" href="#" data-p="${i}">${i}</a></li>`);
+    }
+    if (hi < pages) ul.append(`<li class="page-item disabled"><span class="page-link">…</span></li>`);
+
+    /* Next */
+    ul.append(`
+        <li class="page-item ${current===pages?'disabled':''}">
+            <a class="page-link" href="#" data-p="${current+1}" aria-label="Next">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>`);
+
+    nav.append(ul);
+    container.append(nav);
+
+    /* Click handler */
+    ul.on('click', 'a.page-link[data-p]', function(e) {
+        e.preventDefault();
+        const p = parseInt($(this).data('p'));
+        if (isNaN(p) || p < 1 || p > pages) return;
+        renderHome(homeState.items, p);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+/* ---- Filter ---- */
+$(document).on('click', '.home-filter', function(e) {
+    e.preventDefault();
+    homeState.activeFilter = $(this).data('type');
+    // active highlight
+    $('.home-filter').removeClass('active fw-bold');
+    $(this).addClass('active fw-bold');
+    let items = [...db];
+    if (homeState.activeFilter !== 'all') {
+        items = items.filter(i => filterMap[homeState.activeFilter] && filterMap[homeState.activeFilter].includes(i.type));
+    }
+    if (homeState.activeSort) items = applySort(items, homeState.activeSort);
+    renderHome(items, 1);
+});
+
+/* ---- Sort ---- */
+$(document).on('click', '.home-sort', function(e) {
+    e.preventDefault();
+    homeState.activeSort = $(this).data('sort');
+    // active highlight
+    $('.home-sort').removeClass('active fw-bold');
+    $(this).addClass('active fw-bold');
+    let base = [...db];
+    if (homeState.activeFilter !== 'all' && filterMap[homeState.activeFilter]) {
+        base = base.filter(i => filterMap[homeState.activeFilter].includes(i.type));
+    }
+    base = applySort(base, homeState.activeSort);
+    renderHome(base, 1);
+});
+
+function applySort(arr, sort) {
+    const a = [...arr];
+    switch(sort) {
+        case 'date-desc': return a.sort((x,y) => new Date(y.date) - new Date(x.date));
+        case 'date-asc':  return a.sort((x,y) => new Date(x.date) - new Date(y.date));
+        case 'name-asc':  return a.sort((x,y) => x.name.localeCompare(y.name));
+        case 'name-desc': return a.sort((x,y) => y.name.localeCompare(x.name));
+        default: return a;
+    }
+}
+
+/* ---- Show Info Modal ---- */
+function showInfo(name) {
+    const item = db.find(x => x.name === name);
+    if (!item) return;
+    $('#m-name').text(item.name);
+    $('#m-type').text(item.type);
+    $('#m-modus').text(item.modus);
+    new bootstrap.Modal(document.getElementById('infoModal')).show();
+}
+
+/* ---- Init ---- */
+$(document).ready(function() {
+    injectLayout();
+    renderHome(db, 1);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiyasatPH | Risk Audit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Layout injected by layout.js -->
+
+<main>
+    <section class="container my-4 my-md-5">
+        <h3 class="fw-bold border-bottom pb-2">RISK ASSESSMENT TOOL</h3>
+        <p class="text-muted">Select all observed behaviors to identify the type of scam.</p>
+
+        <div class="row mt-4">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-sm border-0 bg-light p-3 p-md-4 rounded-3">
+
+                    <div class="mb-3">
+                        <label class="fw-bold small text-secondary d-block mb-1">
+                            TARGET ENTITY / APP NAME <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="targetName" class="form-control"
+                               placeholder="e.g. OHO, New Tasking App, Trading Bot…">
+                        <div id="nameError" class="invalid-msg">
+                            ENTITY NAME IS REQUIRED BEFORE EVALUATION.
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-3 border rounded mb-3">
+                        <label class="fw-bold small text-danger mb-2 d-block text-uppercase">
+                            Check all that apply:
+                        </label>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="No SEC License"     data-type="general" type="checkbox"> No SEC License / Reg</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="High Returns"       data-type="ponzi"   type="checkbox"> Guaranteed High Returns</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Recruitment"        data-type="ponzi"   type="checkbox"> Need to Invite to Earn</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Fake Tasks"         data-type="task"    type="checkbox"> Clicking/Liking Tasks</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="VIP Fees"           data-type="task"    type="checkbox"> VIP Levels / Pay-to-Withdraw</label>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Access Contacts"    data-type="lending" type="checkbox"> App Asks to Read Contacts</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Harassment"         data-type="lending" type="checkbox"> Harassment / Threats</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Fake Logos"         data-type="fake"    type="checkbox"> Use of Fake Gov't Logos</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Crypto Payment"     data-type="general" type="checkbox"> GCash/Crypto Personal Accts</label>
+                                <label class="list-group-item p-2"><input class="form-check-input me-2 risk-check" value="Deepfake Ads"       data-type="fake"    type="checkbox"> Deepfake / AI Celebrity Ads</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateAndOpenModal()"
+                            class="btn btn-danger w-100 py-3 fw-bold text-uppercase shadow-sm">
+                        <i class="bi bi-calculator me-2"></i> Evaluate
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Risk Analysis Report Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg rounded-3">
+            <div class="modal-header report-modal-header">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-shield-lock-fill me-2"></i>RISK ANALYSIS REPORT
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+
+                <div class="prediction-box">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold text-uppercase text-secondary" style="font-size:.8rem;">Calculated Risk:</span>
+                        <span id="res-percent" class="display-6 fw-bold text-danger">0%</span>
+                    </div>
+                    <div class="progress mb-3" style="height:10px;">
+                        <div id="res-bar" class="progress-bar bg-danger" role="progressbar" style="width:0%"></div>
+                    </div>
+                    <h5 class="fw-bold text-danger mb-1">PREDICTED CATEGORY:</h5>
+                    <h4 id="res-category" class="fw-bold text-dark mb-0">--</h4>
+                </div>
+
+                <div class="modal-info-section shadow-sm rounded">
+                    <h6 id="label-what-is">What is this scam?</h6>
+                    <p id="info-what-is" class="small text-muted mb-0">--</p>
+                </div>
+                <div class="modal-info-section shadow-sm rounded">
+                    <h6>How to stay safe / Prevention tips:</h6>
+                    <p id="info-prevention" class="small text-muted mb-0">--</p>
+                </div>
+                <div class="modal-info-section shadow-sm rounded">
+                    <h6>Instructions on how to report:</h6>
+                    <p id="info-reporting" class="small text-muted mb-0">--</p>
+                </div>
+
+                <div class="mt-4 mb-2">
+                    <label class="fw-bold small text-secondary">ADDITIONAL DETAILS / EVIDENCE (OPTIONAL):</label>
+                    <textarea id="modalEvidence" class="form-control bg-light" rows="3"
+                              placeholder="Paste links, screenshot descriptions, or GCash numbers…"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button onclick="sendFinalReport()"
+                        class="btn btn-danger w-100 py-3 fw-bold text-uppercase shadow">
+                    <i class="bi bi-envelope-check-fill me-2"></i> Report Now via Email
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="data.js"></script>
+<script src="layout.js"></script>
+<script>
+$(document).ready(() => injectLayout());
+
+function calculateAndOpenModal() {
+    const nameField   = document.getElementById('targetName');
+    const errorMsg    = document.getElementById('nameError');
+    const checkedBoxes = document.querySelectorAll('.risk-check:checked');
+
+    if (nameField.value.trim() === '') {
+        nameField.classList.add('is-invalid');
+        errorMsg.style.display = 'block';
+        nameField.focus();
+        return;
+    }
+    nameField.classList.remove('is-invalid');
+    errorMsg.style.display = 'none';
+
+    if (checkedBoxes.length === 0) {
+        alert('Please select at least one indicator.');
+        return;
+    }
+
+    const count   = checkedBoxes.length;
+    const percent = Math.min((count / 5) * 100, 100);
+
+    const types = { ponzi:0, task:0, lending:0, fake:0, general:0 };
+    checkedBoxes.forEach(box => {
+        const t = box.getAttribute('data-type');
+        if (types[t] !== undefined) types[t]++;
+    });
+
+    let profile = scamProfiles.general;
+    if      (types.lending > 0) profile = scamProfiles.lending;
+    else if (types.task    > 0) profile = scamProfiles.task;
+    else if (types.ponzi   > 0) profile = scamProfiles.ponzi;
+    else if (types.fake    > 0) profile = scamProfiles.fake;
+
+    document.getElementById('res-percent').innerText  = Math.round(percent) + '%';
+    document.getElementById('res-bar').style.width    = percent + '%';
+    document.getElementById('res-category').innerText = profile.title;
+    document.getElementById('label-what-is').innerText = 'What is a ' + profile.title + '?';
+    document.getElementById('info-what-is').innerText  = profile.whatIs;
+    document.getElementById('info-prevention').innerText = profile.prevention;
+    document.getElementById('info-reporting').innerText  = profile.reporting;
+
+    new bootstrap.Modal(document.getElementById('reportModal')).show();
+}
+
+function sendFinalReport() {
+    const name     = document.getElementById('targetName').value;
+    const evidence = document.getElementById('modalEvidence').value || 'No additional notes provided.';
+    const category = document.getElementById('res-category').innerText;
+    const percent  = document.getElementById('res-percent').innerText;
+
+    let flags = '';
+    document.querySelectorAll('.risk-check:checked').forEach(b => { flags += `[x] ${b.value}\n`; });
+
+    let recipient = 'epd@sec.gov.ph';
+    let cc        = 'complaints@cicc.gov.ph';
+    if (category.includes('Lending')) recipient = 'inquiries@privacy.gov.ph';
+
+    const subject  = `REPORT: ${category} - ${name}`;
+    const bodyText =
+`TO: ENFORCEMENT DIVISION
+
+I am reporting ${name} which matches ${category} (${percent}).
+
+DETECTED INDICATORS:
+${flags}
+USER NOTES:
+${evidence}
+
+Generated via SiyasatPH (2026)`;
+
+    window.location.href =
+        'mailto:' + recipient +
+        '?cc=' + cc +
+        '&subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(bodyText);
+}
+</script>
+</body>
+</html>
